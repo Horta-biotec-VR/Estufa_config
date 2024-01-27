@@ -1,6 +1,6 @@
 {
   "scriptUrl": "https://script.google.com/macros/s/AKfycbwEFsgGfAGaC6nW4nlWkBjgT7CPO5JSt8lGQQuKqA8fRo_S_xSvR6bGUPR2ZkyV60H1dA/exec",
-  "check_up_script": "insira_aqui_o_valor_do_check_up_script",
-  "exaustor_script": "insira_aqui_o_valor_do_exaustor_script",
-  "irrigacao_script": "insira_aqui_o_valor_do_irrigacao_script"
+  "check_up_script": "https://script.google.com/macros/s/AKfycbwG7loLAV3J8M5UPQ89iFInI0qRQu7DXzzuJIRUC3e56W5shY6wYpAY90k1BjDjbU0j/exec",
+  "exaustor_script": "Nao operacional",
+  "irrigacao_script": "Nao operacional"
 }
