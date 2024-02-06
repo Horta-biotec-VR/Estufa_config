@@ -1,0 +1,58 @@
+function doPost(e) {
+  // Obtenha os parâmetros do POST
+  var check_temp = e.parameter.check_temp;
+  var check_umid = e.parameter.check_umid;
+  var erroUmidade = e.parameter.erroUmidade;
+  var check_sensor_porta = e.parameter.check_sensor_porta;
+
+  // Configuração do email
+  var destinatario = "jefersonadrianohorn@gmail.com";  // Substitua pelo seu endereço de e-mail
+  var assunto = "Relatório de Sensores";
+  
+  var corpoEmail = "Resultado do Check-up de Sensores:\n\n" +
+                   "Temperatura: " + (check_temp == 1 ? "OK" : "Erro") + "\n" +
+                   "Umidade: " + (check_umid == 1 ? "OK" : "Erro") + "\n" +
+                   "Umidade do Solo: " + (erroUmidade == 1 ? "Erro" : "OK") + "\n" +
+                   "Sensor de Porta: " + (check_sensor_porta == 1 ? "OK" : "Erro") + "\n";
+
+  // Enviar email
+  MailApp.sendEmail({
+    to: destinatario,
+    subject: assunto,
+    body: corpoEmail
+  });
+
+  // Registrar o status na planilha CHECKUP_LOG
+  var planilhaId = "1-StDBPkFpbT0YVgQLapuzE3ZgDZofuGzPkb00DSwvFM";  // Substitua pelo ID da sua planilha
+  var planilha = SpreadsheetApp.openById(planilhaId);
+  var folhaLog = planilha.getSheetByName("CHECKUP_LOG");
+
+  // Adiciona uma nova linha à folha CHECKUP_LOG
+  var dataAtual = new Date();
+  var statusCheckup = [
+    dataAtual,
+    (check_temp == 1 ? "OK" : "Erro"),
+    (check_umid == 1 ? "OK" : "Erro"),
+    (erroUmidade == 1 ? "Erro" : "OK"),
+    (check_sensor_porta == 1 ? "OK" : "Erro")
+  ];
+
+  folhaLog.appendRow(statusCheckup);
+
+  // Aplica formatação condicional para todas as células
+  var ultimaLinha = folhaLog.getLastRow();
+  var ultimaColuna = folhaLog.getLastColumn();
+  var dados = folhaLog.getRange(ultimaLinha, 1, 1, ultimaColuna).getValues()[0];
+
+  for (var i = 0; i < dados.length; i++) {
+    var range = folhaLog.getRange(ultimaLinha, i + 1);
+    if (dados[i] == "Erro") {
+      range.setBackground("red");
+    } else if (dados[i] == "OK") {
+      range.setBackground("#00FF00");  // Verde claro em formato hexadecimal
+    }
+  }
+
+  // Responder à requisição HTTP
+  return ContentService.createTextOutput("Dados recebidos, e-mail enviado e status registrado na planilha CHECKUP_LOG.");
+}
